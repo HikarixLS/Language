@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học 12 thì cùng The Forum</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .tense-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .tense-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .btn {
+            transition: all 0.2s ease;
+        }
+        .btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .modal-backdrop {
+            background-color: rgba(0,0,0,0.5);
+            transition: opacity 0.3s ease;
+        }
+        .prose h3 {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600; /* font-semibold */
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .prose ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+        .prose li {
+            margin-bottom: 0.5rem;
+        }
+        .prose p {
+            line-height: 1.6;
+        }
+        .prose strong {
+            font-weight: 700;
+        }
+        .prose code {
+            background-color: #e2e8f0;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* UPDATED: Drag and Drop styles */
+        .reorder-word.dragging {
+            opacity: 0.4;
+        }
+        .drag-placeholder {
+            background-color: #e0e7ff;
+            border: 2px dashed #a5b4fc;
+            border-radius: 0.25rem;
+            height: 40px; /* Match height of draggable items */
+            flex-shrink: 0;
+        }
+        .exercise-frame {
+            border: 2px dashed #cbd5e1;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            background-color: white;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <img src="https://placehold.co/32x32/6366f1/ffffff?text=TF" alt="Logo" class="h-8 w-8 mr-2 rounded-full">
+                    <h1 class="text-xl font-bold text-slate-800">Học 12 thì cùng The Forum</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="homeBtn" class="text-slate-600 hover:bg-slate-100 font-medium px-3 py-2 rounded-md">Trang chủ</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="container mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- Main Dashboard View -->
+        <div id="dashboard-view">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-2">Ứng dụng học 12 thì của The Forum</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Tại đây, bạn sẽ được luyện tập cách sử dụng 12 thì tiếng Anh, kết hợp lý thuyết chi tiết và bài tập tương tác do AI tạo ra.</p>
+                <p class="text-sm text-slate-500 mt-4 italic">Lưu ý: Bạn cần đăng nhập Google để sử dụng ứng dụng này.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- UPDATED: Added text-center class to center all content -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 flex flex-col text-center">
+                    <h3 class="font-bold text-2xl mb-4 text-indigo-700">Chế độ học theo từng thì</h3>
+                    <p class="text-slate-600 mb-6">Chọn một trong 12 thì dưới đây để bắt đầu học lý thuyết chuyên sâu và làm bài tập củng cố.</p>
+                    <div class="mt-auto">
+                        <select id="tense-select-dropdown" class="w-full p-3 border border-slate-300 rounded-lg bg-white text-base focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 appearance-none bg-no-repeat bg-right pr-8" style="background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22 fill%3D%22none%22 viewBox%3D%220 0 20 20%22%3E%3Cpath stroke%3D%22%236b7280%22 stroke-linecap%3D%22round%22 stroke-linejoin%3D%22round%22 stroke-width%3D%221.5%22 d%3D%22M6 8l4 4 4-4%22%2F%3E%3C%2Fsvg%3E'); background-position: right 0.5rem center; background-size: 1.5em 1.5em;">
+                            <!-- Options populated by JS -->
+                        </select>
+                        <button id="start-learning-btn" class="w-full mt-4 bg-indigo-600 text-white py-3 rounded-lg font-semibold btn hover:bg-indigo-700">Bắt đầu học</button>
+                    </div>
+                </div>
+                <!-- UPDATED: Added text-center class to center all content -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-200 flex flex-col text-center">
+                    <h3 class="font-bold text-2xl mb-4 text-teal-700">Chế độ luyện tập nâng cao</h3>
+                    <p class="text-slate-600 mb-6">Thử thách bản thân với các bài tập ngẫu nhiên, tổng hợp từ tất cả 12 thì để kiểm tra toàn diện kiến thức của bạn.</p>
+                    <button id="advanced-practice-btn" class="w-full mt-auto bg-teal-600 text-white py-3 rounded-lg font-semibold btn hover:bg-teal-700 flex items-center justify-center">
+                        Bắt đầu luyện tập tổng hợp
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learning/Practice View -->
+        <div id="learning-view" class="hidden">
+            <button id="back-to-dashboard" class="mb-6 inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+                </svg>
+                Quay lại trang chính
+            </button>
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                <!-- Theory Section -->
+                <div id="theory-section" class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg border border-slate-200 self-start">
+                    <h2 id="tense-title" class="text-2xl font-bold mb-4"></h2>
+                    <div id="tense-theory" class="prose max-w-none"></div>
+                    <hr class="my-6">
+                    <div id="ai-example-generator">
+                        <h3 class="text-lg font-semibold mb-3">✨ Tạo câu ví dụ với AI</h3>
+                        <p class="text-sm text-slate-600 mb-3">Nhập một chủ đề (ví dụ: "công việc", "du lịch") để AI tạo câu ví dụ thực tế.</p>
+                        <input type="text" id="example-topic-input" placeholder="Nhập chủ đề ở đây..." class="w-full p-2 border border-slate-300 rounded-lg mb-3">
+                        <button id="generate-example-btn" class="btn bg-fuchsia-600 text-white w-full py-2 rounded-lg font-semibold hover:bg-fuchsia-700 flex items-center justify-center">
+                            Tạo ví dụ
+                        </button>
+                        <div id="example-output" class="mt-4 prose max-w-none"></div>
+                    </div>
+                </div>
+
+                <!-- Exercise Section -->
+                <div id="exercise-section" class="lg:col-span-3 bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold">Bài tập thực hành</h3>
+                        <div id="progress-indicator" class="font-medium text-slate-600 bg-slate-100 px-3 py-1 rounded-full"></div>
+                    </div>
+                    
+                    <div id="question-container" class="min-h-[200px] flex flex-col justify-center">
+                        <!-- Question content or loader will be injected here -->
+                    </div>
+                    
+                    <div id="feedback-container" class="min-h-[50px] my-4 p-3 rounded-lg text-left font-medium"></div>
+
+                    <!-- Button Layout -->
+                    <div class="flex items-center justify-between gap-4">
+                        <!-- Left Button -->
+                        <button id="prev-btn" class="btn bg-slate-200 hover:bg-slate-300 px-4 py-2 rounded-lg font-semibold">Câu trước</button>
+                        
+                        <!-- Middle Buttons -->
+                        <div class="flex items-center gap-2">
+                           <button id="analyze-btn" class="btn bg-amber-500 text-white px-4 py-2 rounded-lg font-semibold hidden hover:bg-amber-600 flex items-center justify-center">✨ Phân tích lỗi sai</button>
+                           <button id="check-btn" class="btn bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-700">Kiểm tra</button>
+                        </div>
+                        
+                        <!-- Right Button -->
+                        <button id="next-btn" class="btn bg-slate-200 hover:bg-slate-300 px-4 py-2 rounded-lg font-semibold">Câu sau</button>
+                    </div>
+
+                    <hr class="my-6">
+                    
+                    <div class="text-center">
+                        <button id="load-more-btn" class="btn bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hidden hover:bg-green-700 flex items-center justify-center">✨ Tạo 10 câu hỏi mới</button>
+                        <button id="finish-session-btn" class="btn bg-rose-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-rose-700">Kết thúc buổi học</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- AI Analysis Modal -->
+    <div id="ai-modal" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+        <div class="bg-white rounded-xl shadow-2xl w-11/12 md:w-2/3 lg:w-1/2 max-w-3xl m-4">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-lg font-bold">✨ Phân tích chuyên sâu từ AI</h3>
+                <button id="close-ai-modal" class="text-slate-500 hover:text-slate-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="ai-explanation" class="p-6 prose max-w-none max-h-[60vh] overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- End Session Modal -->
+    <div id="end-session-modal" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+        <div class="bg-white rounded-xl shadow-2xl w-11/12 max-w-md m-4 p-6 text-center">
+            <h3 class="text-xl font-bold mb-4">Bạn muốn kết thúc buổi học?</h3>
+            <p class="text-slate-600 mb-6">Chọn một trong các tùy chọn dưới đây để tiếp tục.</p>
+            <div class="flex flex-col space-y-3">
+                <button id="generate-report-btn" class="btn bg-sky-600 text-white w-full py-3 rounded-lg font-semibold hover:bg-sky-700">Tạo báo cáo cá nhân hóa</button>
+                <button id="confirm-end-btn" class="btn bg-slate-600 text-white w-full py-3 rounded-lg font-semibold hover:bg-slate-700">Kết thúc buổi học</button>
+                <button id="cancel-end-btn" class="btn bg-transparent text-slate-600 w-full py-2 rounded-lg font-medium hover:bg-slate-100">Tiếp tục học</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div id="report-modal" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+        <div class="bg-white rounded-xl shadow-2xl w-11/12 md:w-2/3 lg:w-1/2 max-w-2xl m-4">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-lg font-bold">Báo cáo kết quả học tập</h3>
+                <button id="close-report-modal" class="text-slate-500 hover:text-slate-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="report-content" class="p-6 max-h-[70vh] overflow-y-auto"></div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM ELEMENTS ---
+            const dashboardView = document.getElementById('dashboard-view');
+            const learningView = document.getElementById('learning-view');
+            const tenseSelectDropdown = document.getElementById('tense-select-dropdown');
+            const startLearningBtn = document.getElementById('start-learning-btn');
+            const backToDashboardBtn = document.getElementById('back-to-dashboard');
+            const homeBtn = document.getElementById('homeBtn');
+            const advancedPracticeBtn = document.getElementById('advanced-practice-btn');
+
+            const theorySection = document.getElementById('theory-section');
+            const tenseTitle = document.getElementById('tense-title');
+            const tenseTheory = document.getElementById('tense-theory');
+            const generateExampleBtn = document.getElementById('generate-example-btn');
+            const exampleTopicInput = document.getElementById('example-topic-input');
+            const exampleOutput = document.getElementById('example-output');
+            
+            const exerciseSection = document.getElementById('exercise-section');
+            const progressIndicator = document.getElementById('progress-indicator');
+            const questionContainer = document.getElementById('question-container');
+            const feedbackContainer = document.getElementById('feedback-container');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const checkBtn = document.getElementById('check-btn');
+            const analyzeBtn = document.getElementById('analyze-btn');
+            const loadMoreBtn = document.getElementById('load-more-btn');
+            const finishSessionBtn = document.getElementById('finish-session-btn');
+
+            const aiModal = document.getElementById('ai-modal');
+            const closeAiModalBtn = document.getElementById('close-ai-modal');
+            const aiExplanation = document.getElementById('ai-explanation');
+
+            const endSessionModal = document.getElementById('end-session-modal');
+            const generateReportBtn = document.getElementById('generate-report-btn');
+            const confirmEndBtn = document.getElementById('confirm-end-btn');
+            const cancelEndBtn = document.getElementById('cancel-end-btn');
+
+            const reportModal = document.getElementById('report-modal');
+            const closeReportModalBtn = document.getElementById('close-report-modal');
+            const reportContent = document.getElementById('report-content');
+
+            // --- APP STATE ---
+            let state = {
+                currentMode: 'dashboard', // dashboard, learning, advanced
+                currentTenseId: null,
+                currentTenseName: null,
+                questions: [],
+                currentQuestionIndex: 0,
+                userAnswers: [],
+                startTime: null,
+            };
+            
+            // --- DATA ---
+            const tenses = [
+                { id: 'present_simple', name: 'Hiện tại đơn' },
+                { id: 'present_continuous', name: 'Hiện tại tiếp diễn' },
+                { id: 'present_perfect', name: 'Hiện tại hoàn thành' },
+                { id: 'present_perfect_continuous', name: 'HTHT tiếp diễn' },
+                { id: 'past_simple', name: 'Quá khứ đơn' },
+                { id: 'past_continuous', name: 'Quá khứ tiếp diễn' },
+                { id: 'past_perfect', name: 'Quá khứ hoàn thành' },
+                { id: 'past_perfect_continuous', name: 'QKHT tiếp diễn' },
+                { id: 'future_simple', name: 'Tương lai đơn' },
+                { id: 'future_continuous', name: 'Tương lai tiếp diễn' },
+                { id: 'future_perfect', name: 'Tương lai hoàn thành' },
+                { id: 'future_perfect_continuous', name: 'TLHT tiếp diễn' },
+            ];
+
+            const theoryData = {
+                present_simple: `### 1. Cấu trúc (Structure)\n- **Khẳng định:** S + V(s/es) + O\n- **Phủ định:** S + do/does + not + V(bare) + O\n- **Nghi vấn:** Do/Does + S + V(bare) + O?\n\n### 2. Cách dùng (Usage)\n- Diễn tả một thói quen, hành động lặp đi lặp lại ở hiện tại (always, usually, often, sometimes, never...).\n- Diễn tả một chân lý, sự thật hiển nhiên.\n- Lịch trình, thời gian biểu (tàu, xe, phim ảnh).\n\n### 3. Ví dụ (Examples)\n- *IELTS Speaking:* "I usually **read** books in my free time to broaden my horizons."\n- *Giao tiếp:* "The sun **rises** in the East."\n- *Lịch trình:* "The train to Hanoi **leaves** at 8 PM."\n\n### 4. So sánh với thì khác\n- **Hiện tại đơn vs. Hiện tại tiếp diễn:** HTĐ nói về thói quen, sự thật (luôn đúng), trong khi HTTD nói về hành động đang diễn ra tại thời điểm nói.\n  - *He **works** as a doctor.* (Nghề nghiệp của anh ấy)\n  - *He **is working** in the garden now.* (Hành động tạm thời)\n\n### 5. Mẹo ghi nhớ và lỗi thường gặp\n- **Mẹo:** Luôn nhớ thêm \`-s\`/\`-es\` cho động từ đi với ngôi thứ ba số ít (he, she, it).\n- **Lỗi sai:** Quên chia động từ. *Sai: She **go** to school.* -> *Đúng: She **goes** to school.*`,
+                present_continuous: `### 1. Cấu trúc (Structure)\n- **Khẳng định:** S + am/is/are + V-ing\n- **Phủ định:** S + am/is/are + not + V-ing\n- **Nghi vấn:** Am/Is/Are + S + V-ing?\n\n### 2. Cách dùng (Usage)\n- Hành động đang xảy ra tại thời điểm nói (now, at the moment).\n- Hành động đang diễn ra xung quanh thời điểm nói (nhưng không nhất thiết ngay lúc nói).\n- Kế hoạch chắc chắn trong tương lai gần (có thời gian, địa điểm cụ thể).\n- Phàn nàn về một hành động lặp đi lặp lại gây khó chịu (với 'always', 'constantly').\n\n### 3. Ví dụ (Examples)\n- *IELTS Speaking:* "As you can see from the chart, the number of tourists **is increasing** steadily."\n- *Giao tiếp:* "Please be quiet. The baby **is sleeping**."\n- *Tương lai gần:* "I **am meeting** my professor tomorrow at 10 AM."\n- *Phàn nàn:* "He **is always losing** his keys!"\n\n### 4. So sánh với thì khác\n- **Hiện tại tiếp diễn vs. Hiện tại đơn:** HTTD diễn tả hành động tạm thời, trong khi HTĐ diễn tả sự việc lâu dài, ổn định.\n  - *I **am living** with my parents until I find my own apartment.* (Tạm thời)\n  - *I **live** with my parents.* (Lâu dài)\n\n### 5. Mẹo ghi nhớ và lỗi thường gặp\n- **Mẹo:** Dấu hiệu nhận biết là các trạng từ chỉ thời gian như 'now', 'right now', 'at the moment', 'at present'.\n- **Lỗi sai:** Dùng với các động từ chỉ trạng thái (stative verbs) như 'know', 'believe', 'want', 'need'. *Sai: I **am wanting** a cup of coffee.* -> *Đúng: I **want** a cup of coffee.*`,
+                present_perfect: `### 1. Cấu trúc (Structure)\n- **Khẳng định:** S + have/has + V3/ed\n- **Phủ định:** S + have/has + not + V3/ed\n- **Nghi vấn:** Have/Has + S + V3/ed?\n\n### 2. Cách dùng (Usage)\n- Hành động đã xảy ra trong quá khứ nhưng không rõ thời gian, kết quả còn liên quan đến hiện tại.\n- Trải nghiệm hoặc kinh nghiệm sống (với 'ever', 'never', 'before').\n- Hành động bắt đầu trong quá khứ, kéo dài đến hiện tại (với 'for', 'since').\n- Hành động vừa mới xảy ra (với 'just', 'recently', 'lately').\n\n### 3. Ví dụ (Examples)\n- *IELTS Writing:* "The government **has implemented** several policies to tackle unemployment." (Kết quả là các chính sách đang có hiệu lực)\n- *Giao tiếp (Trải nghiệm):* "**Have** you ever **been** to Japan?"\n- *Giao tiếp (Kéo dài):* "She **has lived** here for ten years."\n\n### 4. So sánh với thì khác\n- **Hiện tại hoàn thành vs. Quá khứ đơn:** HTHT không nhấn mạnh thời gian, QKĐ luôn đi với thời gian xác định trong quá khứ.\n  - *I **have seen** that movie.* (Không rõ xem khi nào)\n  - *I **saw** that movie yesterday.* (Rõ thời gian là 'yesterday')\n\n### 5. Mẹo ghi nhớ và lỗi thường gặp\n- **Mẹo:** Nhớ các trạng từ đặc trưng: 'just', 'yet', 'already', 'ever', 'never', 'for', 'since'.\n- **Lỗi sai:** Dùng HTHT với mốc thời gian đã kết thúc. *Sai: I **have finished** my homework yesterday.* -> *Đúng: I **finished** my homework yesterday.*`,
+                present_perfect_continuous: `### 1. Cấu trúc (Structure)\n- **Khẳng định:** S + have/has + been + V-ing\n- **Phủ định:** S + have/has + not + been + V-ing\n- **Nghi vấn:** Have/Has + S + been + V-ing?\n\n### 2. Cách dùng (Usage)\n- Nhấn mạnh tính liên tục của hành động bắt đầu trong quá khứ, kéo dài đến hiện tại.\n- Hành động vừa mới kết thúc và để lại kết quả có thể thấy ở hiện tại.\n\n### 3. Ví dụ (Examples)\n- *IELTS Speaking:* "I'm a bit tired because I'**ve been studying** for my exam all night." (Nhấn mạnh sự liên tục và kết quả là 'mệt')\n- *Giao tiếp:* "Why are your clothes so dirty?" - "I'**ve been gardening**."\n\n### 4. So sánh với thì khác\n- **HTHT tiếp diễn vs. HT hoàn thành:** HTHTTD nhấn mạnh quá trình, HTHT nhấn mạnh kết quả.\n  - *I'**ve been reading** that book.* (Tôi đang đọc nó, chưa xong)\n  - *I'**ve read** that book.* (Tôi đã đọc xong nó)\n\n### 5. Mẹo ghi nhớ và lỗi thường gặp\n- **Mẹo:** Thường đi với 'for', 'since', 'all day', 'all morning' để nhấn mạnh khoảng thời gian.\n- **Lỗi sai:** Dùng với các động từ chỉ trạng thái. *Sai: I'**ve been knowing** him for years.* -> *Đúng: I'**ve known** him for years.*`,
+                past_simple: `### 1. Cấu trúc (Structure)\n- **Khẳng định:** S + V2/ed\n- **Phủ định:** S + did + not + V(bare)\n- **Nghi vấn:** Did + S + V(bare)?\n\n### 2. Cách dùng (Usage)\n- Hành động đã xảy ra và chấm dứt hoàn toàn trong quá khứ, có thời gian xác định.\n- Một chuỗi các hành động xảy ra liên tiếp trong quá khứ.\n- Thói quen trong quá khứ (thường dùng với 'used to').\n\n### 3. Ví dụ (Examples)\n- *IELTS Writing Task 2:* "In the 20th century, technological advancements **revolutionized** the communication industry."\n- *Giao tiếp (Chuỗi hành động):* "Yesterday, I **woke up**, **had** breakfast, and **went** to work."\n\n### 4. So sánh với thì khác\n- **Quá khứ đơn vs. Hiện tại hoàn thành:** QKĐ dùng cho hành động đã chấm dứt, có thời gian cụ thể. HTHT dùng cho hành động có liên quan đến hiện tại, không rõ thời gian.\n  - *He **lived** in London for 5 years.* (Bây giờ anh ấy không sống ở đó nữa)\n  - *He **has lived** in London for 5 years.* (Anh ấy vẫn đang sống ở đó)\n\n### 5. Mẹo ghi nhớ và lỗi thường gặp\n- **Mẹo:** Dấu hiệu là các trạng từ chỉ thời gian quá khứ: 'yesterday', 'last week', 'in 1999', 'ago'.\n- **Lỗi sai:** Dùng động từ quá khứ sau trợ động từ 'did'. *Sai: I **didn't went** to the party.* -> *Đúng: I **didn't go** to the party.*`,
+                past_continuous: `### 1. Cấu trúc (Structure)\n- **Khẳng định:** S + was/were + V-ing\n- **Phủ định:** S + was/were + not + V-ing\n- **Nghi vấn:** Was/Were + S + V-ing?\n\n### 2. Cách dùng (Usage)\n- Hành động đang xảy ra tại một thời điểm cụ thể trong quá khứ.\n- Một hành động đang xảy ra (QKTD) thì một hành động khác xen vào (QKĐ).\n- Hai hành động xảy ra đồng thời trong quá khứ (thường nối bằng 'while').\n\n### 3. Ví dụ (Examples)\n- *IELTS Speaking:* "I remember it clearly. At this time last year, I **was preparing** for my final exams."\n- *Giao tiếp (Hành động xen vào):* "I **was watching** TV when the phone **rang**."\n- *Giao tiếp (Hành động song song):* "While my mom **was cooking**, I **was doing** my homework."\n\n### 4. So sánh với thì khác\n- **Quá khứ tiếp diễn vs. Quá khứ đơn:** QKTD mô tả bối cảnh, hành động nền. QKĐ mô tả hành động chính, ngắn gọn xen vào.\n\n### 5. Mẹo ghi nhớ và lỗi thường gặp\n- **Mẹo:** Cấu trúc kinh điển: \`When + S + V(QKĐ), S + was/were + V-ing\` và \`While + S + was/were + V-ing, S + V(QKĐ)\`.\n- **Lỗi sai:** Nhầm lẫn giữa 'was' (số ít) và 'were' (số nhiều và 'you'). *Sai: You **was** studying.* -> *Đúng: You **were** studying.*`,
+                past_perfect: `### 1. Cấu trúc (Structure)\n- **Khẳng định:** S + had + V3/ed\n- **Phủ định:** S + had + not + V3/ed\n- **Nghi vấn:** Had + S + V3/ed?\n\n### 2. Cách dùng (Usage)\n- Diễn tả một hành động đã xảy ra và hoàn tất trước một hành động khác hoặc một thời điểm khác trong quá khứ.\n\n### 3. Ví dụ (Examples)\n- *IELTS Writing:* "By the time the new regulations were introduced, many companies **had** already **moved** their factories overseas."\n- *Giao tiếp:* "When I arrived at the station, the train **had** already **left**."\n\n### 4. So sánh với thì khác\n- **Quá khứ hoàn thành vs. Quá khứ đơn:** QKHT là thì "quá khứ của quá khứ". Nó xảy ra trước một hành động QKĐ khác.\n  - *He **told** me he **had lost** his wallet.* (Việc 'mất ví' xảy ra trước việc 'kể')\n\n### 5. Mẹo ghi nhớ và lỗi thường gặp\n- **Mẹo:** Nhớ công thức với 'before' và 'after': \`S + V(QKĐ) + before + S + had + V3/ed\` và \`After + S + had + V3/ed, S + V(QKĐ)\`.\n- **Lỗi sai:** Lạm dụng khi không cần thiết. Nếu các hành động xảy ra theo trình tự thời gian, chỉ cần dùng QKĐ. *Sai: I **had woken up** and **had had** breakfast.* -> *Đúng: I **woke up** and **had** breakfast.*`,
+                past_perfect_continuous: `### 1. Cấu trúc (Structure)\n- **Khẳng định:** S + had + been + V-ing\n- **Phủ định:** S + had + not + been + V-ing\n- **Nghi vấn:** Had + S + been + V-ing?\n\n### 2. Cách dùng (Usage)\n- Nhấn mạnh tính liên tục của một hành động đã xảy ra kéo dài trước một hành động khác trong quá khứ.\n\n### 3. Ví dụ (Examples)\n- *IELTS Speaking:* "My eyes were sore because I **had been reading** for five hours before I went to bed."\n- *Giao tiếp:* "They **had been waiting** for an hour before the bus finally arrived."\n\n### 4. So sánh với thì khác\n- **QKHT tiếp diễn vs. QK hoàn thành:** Tương tự cặp HTHT, QKHTTD nhấn mạnh quá trình, QKHT nhấn mạnh sự hoàn tất.\n  - *He was tired because he **had been running**.* (Nhấn mạnh việc chạy)\n  - *He **had run** 5km before he felt tired.* (Nhấn mạnh kết quả là đã chạy được 5km)\n\n### 5. Mẹo ghi nhớ và lỗi thường gặp\n- **Mẹo:** Dùng để giải thích nguyên nhân cho một tình trạng hoặc sự việc trong quá khứ.\n- **Lỗi sai:** Tương tự các thì tiếp diễn khác, không dùng với động từ trạng thái.`,
+                future_simple: `### 1. Cấu trúc (Structure)\n- **Khẳng định:** S + will + V(bare)\n- **Phủ định:** S + will + not (won't) + V(bare)\n- **Nghi vấn:** Will + S + V(bare)?\n\n### 2. Cách dùng (Usage)\n- Quyết định tức thời tại thời điểm nói.\n- Đưa ra lời hứa, lời đề nghị, lời yêu cầu.\n- Dự đoán không có căn cứ chắc chắn.\n\n### 3. Ví dụ (Examples)\n- *IELTS Speaking:* "In the future, I think more people **will work** from home due to advancements in technology." (Dự đoán)\n- *Giao tiếp (Quyết định tức thời):* "It's cold in here. I'**ll close** the window."\n- *Giao tiếp (Lời hứa):* "I promise I **will call** you tonight."\n\n### 4. So sánh với thì khác\n- **Tương lai đơn vs. Be going to:** 'Will' dùng cho quyết định tức thời, dự đoán không căn cứ. 'Be going to' dùng cho kế hoạch đã có từ trước, dự đoán có căn cứ.\n  - *Look at those dark clouds! It'**s going to rain**.* (Có căn cứ)\n  - *I think it **will rain** tomorrow.* (Không có căn cứ)\n\n### 5. Mẹo ghi nhớ và lỗi thường gặp\n- **Mẹo:** 'Will' thường đi với các cụm từ như 'I think', 'I guess', 'I promise', 'probably'.\n- **Lỗi sai:** Dùng 'will' cho kế hoạch đã định sẵn. *Sai: I **will visit** my aunt this weekend. I already bought the tickets.* -> *Đúng: I **am going to visit**...* hoặc *I **am visiting**...*`,
+                future_continuous: `### 1. Cấu trúc (Structure)\n- **Khẳng định:** S + will + be + V-ing\n- **Phủ định:** S + will + not + be + V-ing\n- **Nghi vấn:** Will + S + be + V-ing?\n\n### 2. Cách dùng (Usage)\n- Một hành động sẽ đang diễn ra tại một thời điểm cụ thể trong tương lai.\n\n### 3. Ví dụ (Examples)\n- *IELTS Speaking:* "It's hard to say for sure, but I imagine that in 20 years, we **will be using** flying cars."\n- *Giao tiếp:* "Don't call me at 8 PM tonight. I **will be having** dinner with my family."\n\n### 4. So sánh với thì khác\n- **TL tiếp diễn vs. TL đơn:** TLTD mô tả một hành động kéo dài tại một điểm thời gian tương lai, trong khi TLĐ chỉ nói về một hành động sẽ xảy ra.\n  - *At 9 AM tomorrow, I **will be taking** my exam.* (Hành động 'làm bài thi' đang diễn ra lúc 9h)\n  - *The exam **will start** at 9 AM tomorrow.* (Hành động 'bắt đầu' xảy ra lúc 9h)\n\n### 5. Mẹo ghi nhớ và lỗi thường gặp\n- **Mẹo:** Cấu trúc thường gặp là: \`At + [giờ] + [thời gian tương lai], S + will be + V-ing\`.\n- **Lỗi sai:** Dùng cho dự đoán chung chung không có thời gian cụ thể.`,
+                future_perfect: `### 1. Cấu trúc (Structure)\n- **Khẳng định:** S + will + have + V3/ed\n- **Phủ định:** S + will + not + have + V3/ed\n- **Nghi vấn:** Will + S + have + V3/ed?\n\n### 2. Cách dùng (Usage)\n- Một hành động sẽ hoàn tất trước một thời điểm hoặc một hành động khác trong tương lai.\n\n### 3. Ví dụ (Examples)\n- *IELTS Writing:* "By 2050, scientists predict that we **will have found** solutions to many current environmental problems."\n- *Giao tiếp:* "By the time you arrive, I **will have finished** my homework."\n\n### 4. So sánh với thì khác\n- **TL hoàn thành vs. TL đơn:** TLHT nhấn mạnh sự hoàn tất của hành động trước một mốc thời gian tương lai.\n  - *I **will finish** the report.* (Sẽ hoàn thành, không rõ khi nào)\n  - *I **will have finished** the report by 5 PM.* (Chắc chắn xong trước 5h)\n\n### 5. Mẹo ghi nhớ và lỗi thường gặp\n- **Mẹo:** Dấu hiệu nhận biết là các cụm từ \`by + [thời gian tương lai]\` hoặc \`by the time + [mệnh đề hiện tại đơn]\`.\n- **Lỗi sai:** Dùng mệnh đề tương lai sau 'by the time'. *Sai: By the time you **will arrive**...* -> *Đúng: By the time you **arrive**...*`,
+                future_perfect_continuous: `### 1. Cấu trúc (Structure)\n- **Khẳng định:** S + will + have + been + V-ing\n- **Phủ định:** S + will + not + have + been + V-ing\n- **Nghi vấn:** Will + S + have + been + V-ing?\n\n### 2. Cách dùng (Usage)\n- Nhấn mạnh tính liên tục của một hành động kéo dài đến một thời điểm nào đó trong tương lai.\n\n### 3. Ví dụ (Examples)\n- *IELTS Speaking:* "By the end of this year, I **will have been working** at this company for a decade."\n- *Giao tiếp:* "Next month, we **will have been living** in this house for three years."\n\n### 4. So sánh với thì khác\n- **TLHT tiếp diễn vs. TL hoàn thành:** TLHTTD nhấn mạnh khoảng thời gian hành động diễn ra. TLHT nhấn mạnh sự hoàn tất.\n  - *By 6 PM, I **will have been cooking** for two hours.* (Nhấn mạnh quá trình nấu 2 tiếng)\n  - *By 6 PM, I **will have cooked** dinner.* (Nhấn mạnh kết quả là bữa tối đã xong)\n\n### 5. Mẹo ghi nhớ và lỗi thường gặp\n- **Mẹo:** Thường dùng để tính toán một hành động đã kéo dài bao lâu tính đến một mốc thời gian trong tương lai.\n- **Lỗi sai:** Rất ít phổ biến trong giao tiếp hàng ngày, chủ yếu dùng trong các ngữ cảnh cần sự trang trọng hoặc chính xác cao.`
+            };
+
+            // --- GEMINI API INTEGRATION ---
+            const API_KEY = "AIzaSyDNQZm1JNAWEHfzJkqkFiHqCoziZ8teksA"; // Use API Key from environment
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
+            
+            async function callGemini(prompt, generationConfig = {}) {
+                try {
+                    const payload = {
+                        contents: [{ role: "user", parts: [{ text: prompt }] }],
+                        generationConfig
+                    };
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) {
+                        throw new Error(`API call failed with status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    if (data.candidates && data.candidates.length > 0) {
+                        return data.candidates[0].content.parts[0].text;
+                    }
+                    throw new Error("No content received from API.");
+                } catch (error) {
+                    console.error("Gemini API call error:", error);
+                    return null;
+                }
+            }
+
+            async function AIGenerateExercises(tenseId, tenseName, count = 10) {
+                setLoadingState(questionContainer, true, "AI đang tạo bộ câu hỏi mới...");
+                const prompt = `Bạn là một chuyên gia ra đề thi tiếng Anh cho người Việt. Hãy tạo ${count} bài tập ngữ pháp tiếng Anh, tập trung vào thì "${tenseName}" (tenseId: ${tenseId}). Nếu tenseId là 'all', hãy tạo bài tập tổng hợp các thì.
+                Các bài tập phải đa dạng, bao gồm 4 loại: 'mcq', 'fill', 'find_error', và 'reorder'.
+                
+                Hãy trả về một chuỗi JSON hợp lệ chứa một mảng các đối tượng. Mỗi đối tượng phải có các thuộc tính sau:
+                - "type": (string) một trong các giá trị "mcq", "fill", "find_error", "reorder".
+                - "question": (string) Nội dung câu hỏi.
+                - "options": (array of strings) Chỉ dành cho loại "mcq".
+                - "answer": (string) Đáp án đúng. 
+                - "explanation": (string) Giải thích ngắn gọn bằng tiếng Việt tại sao đáp án đó đúng.
+                - "words": (array of strings) Chỉ dành cho loại "reorder", chứa các từ/cụm từ cần sắp xếp.
+
+                QUY TẮC CỰC KỲ QUAN TRỌNG:
+                1.  **NGÔN NGỮ CÂU HỎI:** Giá trị của key "question" BẮT BUỘC phải viết 100% bằng tiếng Anh. TUYỆT ĐỐI không chèn bất kỳ từ tiếng Việt nào vào câu hỏi.
+                2.  **CẤU TRÚC "FILL":** Với type "fill", câu hỏi trong "question" phải đặt động từ nguyên mẫu cần chia trong dấu ngoặc vuông. Ví dụ: "She [visit] Paris three times already.". Đáp án trong "answer" nếu có nhiều chỗ trống phải được nối với nhau bằng dấu phẩy KHÔNG có khoảng trắng, ví dụ: "has visited,did not go".
+                3.  **CẤU TRÚC "FIND_ERROR":** Với type "find_error", câu hỏi trong "question" phải là một câu hoàn chỉnh, trong đó có **ít nhất 3 và tốt nhất là 4** phần được bôi đậm bằng dấu \`** **\`. Chỉ **một** trong số các phần được bôi đậm đó chứa lỗi sai. Giá trị của key "answer" BẮT BUỘC phải là phần văn bản chứa lỗi sai đó.
+                4.  **CẤU TRÚC "REORDER":** Với type "reorder", "question" CHỈ được chứa câu chỉ dẫn bằng tiếng Anh. Các từ cần sắp xếp BẮT BUỘC phải nằm trong mảng "words". Từ đầu tiên của câu phải được viết hoa trong mảng "words".
+                
+                Chỉ trả về chuỗi JSON, không có bất kỳ văn bản nào khác.`;
+
+                const generationConfig = {
+                    responseMimeType: "application/json",
+                };
+
+                const resultText = await callGemini(prompt, generationConfig);
+                setLoadingState(questionContainer, false);
+                if (resultText) {
+                    try {
+                        return JSON.parse(resultText);
+                    } catch (e) {
+                        console.error("Failed to parse JSON from Gemini:", e);
+                        questionContainer.innerHTML = `<p class="text-red-500">Đã có lỗi xảy ra khi tạo bài tập. Vui lòng thử lại.</p>`;
+                        return [];
+                    }
+                }
+                return [];
+            }
+
+            // --- RENDER FUNCTIONS ---
+            function renderTenseDropdown() {
+                tenseSelectDropdown.innerHTML = tenses.map(tense => `
+                    <option value="${tense.id}" data-tense-name="${tense.name}">${tense.name}</option>
+                `).join('');
+            }
+
+            function shuffleArray(array) {
+                let currentIndex = array.length,  randomIndex;
+                while (currentIndex != 0) {
+                    randomIndex = Math.floor(Math.random() * currentIndex);
+                    currentIndex--;
+                    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+                }
+                return array;
+            }
+
+            function renderQuestion() {
+                 if (state.questions.length === 0) {
+                    setLoadingState(questionContainer, true, "Đang tải câu hỏi...");
+                    return;
+                }
+                setLoadingState(questionContainer, false);
+                const q = state.questions[state.currentQuestionIndex];
+                const userAnswer = state.userAnswers[state.currentQuestionIndex] || {};
+                
+                let questionHtml = '';
+                let answerHtml = '';
+                
+                switch (q.type) {
+                    case 'mcq':
+                        questionHtml = `<p class="text-lg">${q.question}</p>`;
+                        answerHtml = `<div class="grid grid-cols-2 gap-4 w-full">` +
+                        q.options.map(opt => `
+                            <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-slate-50 ${userAnswer.answer === opt ? 'border-indigo-500 bg-indigo-50' : 'border-slate-300'}">
+                                <input type="radio" name="option" value="${opt}" class="mr-3" ${userAnswer.answer === opt ? 'checked' : ''}>
+                                <span>${opt}</span>
+                            </label>
+                        `).join('') + `</div>`;
+                        break;
+                    case 'fill':
+                        const verbs = q.question.match(/\[.*?\]/g) || [];
+                        questionHtml = `<p class="text-lg">${q.question.replace(/\[.*?\]/g, '______')}</p>`;
+                        
+                        answerHtml = `<div class="flex flex-col gap-4 w-full">` +
+                        verbs.map((verb, index) => {
+                            const savedAnswers = userAnswer.answer ? userAnswer.answer.split(',') : [];
+                            return `
+                            <div class="flex items-center gap-2">
+                                <label for="fill-input-${index}" class="font-medium text-slate-600">${verb.replace(/\[|\]/g, '')}:</label>
+                                <input type="text" id="fill-input-${index}" value="${savedAnswers[index] || ''}" class="fill-input flex-grow p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+                            `
+                        }).join('') + `</div>`;
+                        break;
+                    case 'find_error':
+                        questionHtml = `<p class="text-lg">Find the mistake in the following sentence:</p>`;
+                        answerHtml = `<div class="w-full">
+                                        <p class="text-xl mb-4">${q.question.replace(/\*\*(.*?)\*\*/g, `<span class="font-bold text-indigo-600 p-1 rounded-md cursor-pointer hover:bg-indigo-100 error-option" data-option="$1">$1</span>`)}</p>`;
+                        if (userAnswer.answer) {
+                            answerHtml += `<p class="mt-2 text-slate-600">You selected: <span class="font-bold">${userAnswer.answer}</span></p>`;
+                        }
+                        answerHtml += `</div>`;
+                        break;
+                    case 'reorder':
+                        questionHtml = `<p class="text-lg">${q.question}</p>`;
+                        const words = userAnswer.answer ? userAnswer.answer.split(' ') : shuffleArray([...q.words]);
+                        answerHtml = `<div id="reorder-container" class="p-4 bg-slate-100 rounded-lg min-h-[60px] flex flex-wrap gap-2 border-2 border-slate-200">` +
+                        words.map(word => `<div draggable="true" class="reorder-word p-2 bg-white rounded shadow cursor-move border">${word}</div>`).join('') +
+                        `</div>`;
+                        break;
+                }
+
+                questionContainer.innerHTML = `
+                    <div class="exercise-frame min-h-[80px] flex items-center justify-center text-center">${questionHtml}</div>
+                    <div class="my-3"></div>
+                    <div class="exercise-frame min-h-[100px] flex items-center justify-center w-full">${answerHtml}</div>
+                `;
+
+                updateProgress();
+                updateFeedback(userAnswer);
+                
+                if (q.type === 'find_error') addFindErrorListeners();
+                if (q.type === 'reorder') addReorderListeners();
+            }
+
+            function updateProgress() {
+                progressIndicator.textContent = `Câu ${state.currentQuestionIndex + 1} / ${state.questions.length}`;
+                prevBtn.disabled = state.currentQuestionIndex === 0;
+                nextBtn.disabled = state.currentQuestionIndex === state.questions.length - 1;
+                prevBtn.classList.toggle('opacity-50', prevBtn.disabled);
+                nextBtn.classList.toggle('opacity-50', nextBtn.disabled);
+
+                const answeredCount = state.userAnswers.filter(a => a && a.isCorrect !== undefined).length;
+                if (state.questions.length > 0 && answeredCount === state.questions.length) {
+                    loadMoreBtn.classList.remove('hidden');
+                    finishSessionBtn.classList.remove('hidden');
+                    checkBtn.classList.add('hidden');
+                } else {
+                    loadMoreBtn.classList.add('hidden');
+                    checkBtn.classList.remove('hidden');
+                }
+            }
+
+            function updateFeedback(userAnswer) {
+                feedbackContainer.innerHTML = '';
+                feedbackContainer.className = 'my-4 p-3 rounded-lg text-left font-medium';
+                analyzeBtn.classList.add('hidden');
+
+                if (userAnswer && userAnswer.isCorrect !== undefined) {
+                    if (userAnswer.isCorrect) {
+                        feedbackContainer.classList.add('bg-green-100', 'text-green-800');
+                        feedbackContainer.innerHTML = `
+                            <p class="font-bold text-center">🎉 Chính xác! Làm tốt lắm!</p>
+                            <hr class="my-2 border-green-200">
+                            <p><strong class="font-semibold">Giải thích:</strong> ${userAnswer.question.explanation}</p>
+                        `;
+                    } else {
+                        feedbackContainer.classList.add('bg-rose-100', 'text-rose-800');
+                        feedbackContainer.innerHTML = '<p class="text-center">Chưa đúng. Hãy thử lại hoặc xem phân tích từ AI nhé!</p>';
+                        analyzeBtn.classList.remove('hidden');
+                    }
+                }
+            }
+
+            function showView(viewName) {
+                dashboardView.classList.add('hidden');
+                learningView.classList.add('hidden');
+                document.getElementById(`${viewName}-view`).classList.remove('hidden');
+            }
+
+             function setLoadingState(element, isLoading, text = '') {
+                if (isLoading) {
+                    element.innerHTML = `<div class="flex flex-col items-center justify-center h-full">
+                        <div class="loader mb-2"></div>
+                        <p class="text-slate-500">${text}</p>
+                    </div>`;
+                } else {
+                    element.innerHTML = '';
+                }
+            }
+
+            function setButtonLoading(button, isLoading, originalText = '') {
+                if (isLoading) {
+                    button.disabled = true;
+                    button.dataset.originalText = button.innerHTML;
+                    button.innerHTML = `<div class="loader !w-5 !h-5 !border-2 !border-t-white"></div>`;
+                } else {
+                    button.disabled = false;
+                    button.innerHTML = button.dataset.originalText || originalText;
+                }
+            }
+            
+            // --- DYNAMIC EVENT LISTENERS ---
+            function addFindErrorListeners() {
+                document.querySelectorAll('.error-option').forEach(span => {
+                    span.addEventListener('click', () => {
+                        document.querySelectorAll('.error-option').forEach(el => el.classList.remove('bg-indigo-200', 'ring-2', 'ring-indigo-400'));
+                        span.classList.add('bg-indigo-200', 'ring-2', 'ring-indigo-400');
+                        state.userAnswers[state.currentQuestionIndex] = { ...state.userAnswers[state.currentQuestionIndex], answer: span.dataset.option };
+                        renderQuestion();
+                    });
+                });
+            }
+
+            function addReorderListeners() {
+                const container = document.getElementById('reorder-container');
+                if (!container) return; 
+                let draggedItem = null;
+
+                container.addEventListener('dragstart', e => {
+                    if (e.target.classList.contains('reorder-word')) {
+                        draggedItem = e.target;
+                        setTimeout(() => {
+                            e.target.classList.add('dragging');
+                        }, 0);
+                    }
+                });
+
+                container.addEventListener('dragend', e => {
+                    if (draggedItem) {
+                        setTimeout(() => {
+                            draggedItem.classList.remove('dragging');
+                            draggedItem = null;
+                        }, 0);
+                    }
+                });
+
+                container.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    const afterElement = getDragAfterElement(container, e.clientX);
+                    if (draggedItem) {
+                        if (afterElement == null) {
+                            container.appendChild(draggedItem);
+                        } else {
+                            container.insertBefore(draggedItem, afterElement);
+                        }
+                    }
+                });
+            }
+
+            function getDragAfterElement(container, x) {
+                const draggableElements = [...container.querySelectorAll('.reorder-word:not(.dragging)')];
+
+                return draggableElements.reduce((closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = x - box.left - box.width / 2;
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset: offset, element: child };
+                    } else {
+                        return closest;
+                    }
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+            }
+
+
+            // --- LOGIC & EVENT HANDLERS ---
+            async function startSession(tenseId, tenseName, mode) {
+                state.currentTenseId = tenseId;
+                state.currentTenseName = tenseName;
+                state.currentMode = mode;
+                state.currentQuestionIndex = 0;
+                state.userAnswers = [];
+                state.questions = [];
+                state.startTime = new Date();
+
+                showView('learning');
+                renderQuestion(); 
+
+                if (mode === 'learning') {
+                    theorySection.classList.remove('hidden');
+                    exerciseSection.classList.remove('lg:col-span-5');
+                    exerciseSection.classList.add('lg:col-span-3');
+                    tenseTitle.textContent = tenseName;
+                    tenseTheory.innerHTML = marked.parse(theoryData[tenseId] || 'Lý thuyết cho thì này đang được cập nhật.');
+                    exampleOutput.innerHTML = '';
+                    exampleTopicInput.value = '';
+                } else {
+                    theorySection.classList.add('hidden');
+                    exerciseSection.classList.remove('lg:col-span-3');
+                    exerciseSection.classList.add('lg:col-span-5');
+                    tenseTitle.textContent = "Luyện tập tổng hợp";
+                }
+                
+                state.questions = await AIGenerateExercises(tenseId, tenseName);
+                renderQuestion();
+            }
+
+            function checkAnswer() {
+                const q = state.questions[state.currentQuestionIndex];
+                let userAnswerValue;
+                
+                switch (q.type) {
+                    case 'mcq':
+                        userAnswerValue = questionContainer.querySelector('input[name="option"]:checked')?.value;
+                        break;
+                    case 'fill':
+                        const inputs = Array.from(questionContainer.querySelectorAll('.fill-input'));
+                        userAnswerValue = inputs.map(input => input.value.trim()).join(',');
+                        break;
+                    case 'find_error':
+                        userAnswerValue = (state.userAnswers[state.currentQuestionIndex] || {}).answer;
+                        break;
+                    case 'reorder':
+                        const words = Array.from(questionContainer.querySelectorAll('#reorder-container .reorder-word')).map(d => d.textContent);
+                        userAnswerValue = words.join(' ');
+                        break;
+                }
+
+                if (!userAnswerValue || (q.type === 'fill' && userAnswerValue.includes(',,'))) {
+                    alert('Vui lòng điền đầy đủ đáp án!');
+                    return;
+                }
+                
+                const normalize = (str) => {
+                    if (typeof str !== 'string') return '';
+                    return str.toLowerCase()
+                              .replace(/\s+/g, ' ') // Standardize multiple spaces to one
+                              .trim()
+                              .replace(/\s+([,.?])/g, '$1') // Remove space before punctuation
+                              .replace(/n't/g, ' not'); // Handle contractions
+                };
+
+                const normalizedUserAnswer = normalize(userAnswerValue);
+                const normalizedCorrectAnswer = normalize(q.answer);
+                const isCorrect = normalizedUserAnswer === normalizedCorrectAnswer;
+
+                state.userAnswers[state.currentQuestionIndex] = {
+                    answer: userAnswerValue,
+                    isCorrect: isCorrect,
+                    question: q,
+                };
+                
+                renderQuestion();
+            }
+
+            async function showAIAnalysis() {
+                const userAnswer = state.userAnswers[state.currentQuestionIndex];
+                if (!userAnswer || userAnswer.isCorrect) return;
+
+                aiModal.classList.remove('hidden');
+                aiModal.classList.add('flex');
+                setLoadingState(aiExplanation, true, "AI đang phân tích...");
+
+                const q = userAnswer.question;
+                const prompt = `Bạn là một gia sư tiếng Anh tận tâm. Một học sinh Việt Nam đang học thì "${state.currentTenseName}" và đã trả lời sai một câu hỏi.
+                Hãy giải thích lỗi sai của họ một cách rõ ràng, khích lệ và dễ hiểu bằng tiếng Việt.
+                
+                - Câu hỏi: ${q.question.replace(/\[.*?\]/g, '______').replace(/\*\*/g, '')}
+                - Câu trả lời của học sinh: ${userAnswer.answer}
+                - Đáp án đúng: ${q.answer}
+                
+                Lời giải thích của bạn nên:
+                1. Chỉ ra lỗi sai nằm ở đâu.
+                2. Giải thích quy tắc ngữ pháp đúng.
+                3. Cho một ví dụ đúng khác để minh họa.
+                4. Đưa ra một mẹo nhỏ để ghi nhớ và tránh lỗi này trong tương lai.
+                
+                Sử dụng Markdown để định dạng câu trả lời cho đẹp mắt.`;
+
+                const explanationText = await callGemini(prompt);
+                setLoadingState(aiExplanation, false);
+                if (explanationText) {
+                    aiExplanation.innerHTML = marked.parse(explanationText);
+                } else {
+                    aiExplanation.innerHTML = "<p>Rất tiếc, đã có lỗi xảy ra khi phân tích. Vui lòng thử lại.</p>";
+                }
+            }
+
+            async function handleGenerateExamples() {
+                const topic = exampleTopicInput.value.trim();
+                if (!topic) {
+                    alert("Vui lòng nhập một chủ đề.");
+                    return;
+                }
+
+                setButtonLoading(generateExampleBtn, true);
+                setLoadingState(exampleOutput, true, "AI đang viết ví dụ...");
+
+                const prompt = `Bạn là một giáo viên tiếng Anh. Hãy viết 3 câu ví dụ thực tế cho một học sinh Việt Nam sử dụng thì "${state.currentTenseName}".
+                Các câu ví dụ phải xoay quanh chủ đề: "${topic}".
+                Với mỗi câu, hãy cung cấp một bản dịch tiếng Việt ngắn gọn.
+                
+                Dùng Markdown để định dạng, ví dụ:
+                - **Câu 1:** [Câu tiếng Anh]
+                  - *Dịch:* [Câu tiếng Việt]
+                - **Câu 2:** ...`;
+                
+                const exampleText = await callGemini(prompt);
+                setButtonLoading(generateExampleBtn, false, 'Tạo ví dụ');
+                setLoadingState(exampleOutput, false);
+
+                if (exampleText) {
+                    exampleOutput.innerHTML = marked.parse(exampleText);
+                } else {
+                    exampleOutput.innerHTML = "<p>Không thể tạo ví dụ lúc này. Vui lòng thử lại.</p>";
+                }
+            }
+
+            function generateReport() {
+                const endTime = new Date();
+                const duration = Math.round((endTime - state.startTime) / 1000);
+                const correctAnswers = state.userAnswers.filter(a => a && a.isCorrect).length;
+                const totalAnswered = state.userAnswers.filter(a => a).length;
+                const accuracy = totalAnswered > 0 ? Math.round((correctAnswers / totalAnswered) * 100) : 0;
+
+                const wrongAnswers = state.userAnswers.filter(a => a && !a.isCorrect);
+                let commonErrorsHtml = '<li>Không có lỗi sai nào!</li>';
+                if (wrongAnswers.length > 0) {
+                    commonErrorsHtml = wrongAnswers.map(wa => `
+                        <li class="mb-2 p-2 bg-rose-50 rounded-md">
+                            <p><strong>Câu hỏi:</strong> ${wa.question.question.replace(/\[.*?\]/g, '______').replace(/\*\*/g, '')}</p>
+                            <p><strong>Bạn chọn:</strong> <span class="text-rose-700">${wa.answer}</span> | <strong>Đáp án đúng:</strong> <span class="text-green-700">${wa.question.answer}</span></p>
+                        </li>
+                    `).join('');
+                }
+
+                reportContent.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-3 gap-4 text-center">
+                            <div><p class="text-sm text-slate-500">Hoàn thành</p><p class="text-2xl font-bold">${totalAnswered}/${state.questions.length}</p></div>
+                            <div><p class="text-sm text-slate-500">Chính xác</p><p class="text-2xl font-bold text-green-600">${accuracy}%</p></div>
+                            <div><p class="text-sm text-slate-500">Thời gian</p><p class="text-2xl font-bold">${Math.floor(duration/60)}m ${duration%60}s</p></div>
+                        </div>
+                        <hr>
+                        <div><h4 class="font-bold text-lg mb-2">Các lỗi sai cần xem lại:</h4><ul class="space-y-2">${commonErrorsHtml}</ul></div>
+                    </div>`;
+                endSessionModal.classList.remove('flex');
+                endSessionModal.classList.add('hidden');
+                reportModal.classList.remove('hidden');
+                reportModal.classList.add('flex');
+            }
+            
+            function resetToDashboard() {
+                state = { currentMode: 'dashboard', currentTenseId: null, currentTenseName: null, questions: [], currentQuestionIndex: 0, userAnswers: [], startTime: null };
+                showView('dashboard');
+                [aiModal, endSessionModal, reportModal].forEach(modal => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                });
+            }
+
+            // --- EVENT LISTENERS BINDING ---
+            startLearningBtn.addEventListener('click', () => {
+                const selectedOption = tenseSelectDropdown.options[tenseSelectDropdown.selectedIndex];
+                const tenseId = selectedOption.value;
+                const tenseName = selectedOption.dataset.tenseName;
+                if (tenseId) {
+                    startSession(tenseId, tenseName, 'learning');
+                }
+            });
+
+            advancedPracticeBtn.addEventListener('click', () => {
+                startSession('all', 'Tổng hợp', 'advanced');
+            });
+
+            backToDashboardBtn.addEventListener('click', resetToDashboard);
+            homeBtn.addEventListener('click', resetToDashboard);
+
+            prevBtn.addEventListener('click', () => {
+                if (state.currentQuestionIndex > 0) {
+                    state.currentQuestionIndex--;
+                    renderQuestion();
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (state.currentQuestionIndex < state.questions.length - 1) {
+                    state.currentQuestionIndex++;
+                    renderQuestion();
+                }
+            });
+            
+            checkBtn.addEventListener('click', checkAnswer);
+            analyzeBtn.addEventListener('click', showAIAnalysis);
+            loadMoreBtn.addEventListener('click', () => {
+                startSession(state.currentTenseId, state.currentTenseName, state.currentMode);
+            });
+            generateExampleBtn.addEventListener('click', handleGenerateExamples);
+
+            finishSessionBtn.addEventListener('click', () => {
+                endSessionModal.classList.remove('hidden');
+                endSessionModal.classList.add('flex');
+            });
+            
+            // Modal controls
+            closeAiModalBtn.addEventListener('click', () => { aiModal.classList.add('hidden'); aiModal.classList.remove('flex'); });
+            cancelEndBtn.addEventListener('click', () => { endSessionModal.classList.add('hidden'); endSessionModal.classList.remove('flex'); });
+            // Updated event listener
+            confirmEndBtn.addEventListener('click', () => {
+                resetToDashboard();
+            });
+            generateReportBtn.addEventListener('click', generateReport);
+            closeReportModalBtn.addEventListener('click', () => { reportModal.classList.add('hidden'); reportModal.classList.remove('flex'); });
+
+            // --- INITIALIZATION ---
+            renderTenseDropdown();
+            showView('dashboard');
+        });
+    </script>
+</body>
+</html>

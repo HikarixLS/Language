@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Từ vựng IELTS - 1 sản phẩm được tạo với The Forum</title>
+    <title>Quiz Từ vựng Thái - 1 sản phẩm được tạo với NFuoq</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -65,7 +65,7 @@ body {
             <p class="mb-6 text-lg">Học từ vựng theo chủ đề hoặc thử thách ngẫu nhiên!</p>
             
             <div class="mb-4">
-                <label for="topic-input" class="block mb-2 text-left font-medium text-gray-700 dark:text-gray-300">Nhập chủ đề (ví dụ: environment, technology):</label>
+                <label for="topic-input" class="block mb-2 text-left font-medium text-gray-700 dark:text-gray-300">Nhập chủ đề:</label>
                 <input type="text" id="topic-input" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Chủ đề bất kỳ...">
             </div>
 
@@ -135,37 +135,163 @@ body {
     <script>
 // Danh sách từ vựng tiếng Thái romanized (Latin hóa) và nghĩa tiếng Việt
 const hardcodedWords = [
+    // Chào hỏi và lịch sự
     { word: 'sawasdee', definition: 'Xin chào' },
     { word: 'khrap', definition: 'Vâng, dạ (lịch sự, nam)' },
     { word: 'kha', definition: 'Vâng, dạ (lịch sự, nữ)' },
+    { word: 'khob khun', definition: 'Cảm ơn' },
+    { word: 'khor thot', definition: 'Xin lỗi' },
+    { word: 'laa gon', definition: 'Tạm biệt' },
+    { word: 'sabai dee mai', definition: 'Khỏe không?' },
+    { word: 'mai pen rai', definition: 'Không sao' },
+    
+    // Từ cơ bản
     { word: 'mai', definition: 'Không' },
     { word: 'chai', definition: 'Đúng, phải' },
     { word: 'mai chai', definition: 'Không phải' },
-    { word: 'khob khun', definition: 'Cảm ơn' },
-    { word: 'khor thot', definition: 'Xin lỗi' },
     { word: 'rak', definition: 'Yêu' },
-    { word: 'phaa', definition: 'Dẫn đi, đưa đi' },
+    { word: 'hen', definition: 'Thấy, nhìn thấy' },
+    { word: 'fang', definition: 'Nghe' },
+    { word: 'phut', definition: 'Nói' },
+    { word: 'tam', definition: 'Làm, thực hiện' },
+    { word: 'pai', definition: 'Đi' },
+    { word: 'maa', definition: 'Đến' },
+    { word: 'yuu', definition: 'Ở' },
+    { word: 'nang', definition: 'Ngồi' },
+    { word: 'yuen', definition: 'Đứng' },
+    { word: 'non', definition: 'Nằm' },
+    
+    // Gia đình
+    { word: 'pho', definition: 'Bố' },
+    { word: 'mae', definition: 'Mẹ' },
+    { word: 'phi', definition: 'Anh/Chị' },
+    { word: 'nong', definition: 'Em' },
+    { word: 'luuk', definition: 'Con' },
+    { word: 'yaa', definition: 'Bà ngoại' },
+    { word: 'taa', definition: 'Ông ngoại' },
+    { word: 'krob khrua', definition: 'Gia đình' },
+    
+    // Số đếm
+    { word: 'nueng', definition: 'Một' },
+    { word: 'song', definition: 'Hai' },
+    { word: 'sam', definition: 'Ba' },
+    { word: 'si', definition: 'Bốn' },
+    { word: 'haa', definition: 'Năm' },
+    { word: 'hok', definition: 'Sáu' },
+    { word: 'jet', definition: 'Bảy' },
+    { word: 'paet', definition: 'Tám' },
+    { word: 'kao', definition: 'Chín' },
+    { word: 'sip', definition: 'Mười' },
+    
+    // Màu sắc
+    { word: 'daeng', definition: 'Đỏ' },
+    { word: 'khiao', definition: 'Xanh lá' },
+    { word: 'nam ngoen', definition: 'Xanh dương' },
+    { word: 'luang', definition: 'Vàng' },
+    { word: 'dam', definition: 'Đen' },
+    { word: 'khao sii', definition: 'Trắng' },
+    { word: 'muang', definition: 'Tím' },
+    { word: 'som', definition: 'Cam' },
+    { word: 'chom phu', definition: 'Hồng' },
+    
+    // Thức ăn và đồ uống
+    { word: 'khao', definition: 'Cơm' },
+    { word: 'nam', definition: 'Nước' },
+    { word: 'gai', definition: 'Gà' },
+    { word: 'muu', definition: 'Heo' },
+    { word: 'neua', definition: 'Thịt bò' },
+    { word: 'plaa', definition: 'Cá' },
+    { word: 'phak', definition: 'Rau' },
+    { word: 'phon la mai', definition: 'Trái cây' },
+    { word: 'khao niao', definition: 'Xôi' },
+    { word: 'tom yam', definition: 'Tôm chua cay' },
+    { word: 'pad thai', definition: 'Phở Thái' },
+    { word: 'cha yen', definition: 'Trà đá' },
+    { word: 'ka fae', definition: 'Cà phê' },
+    
+    // Thời gian
+    { word: 'wan ni', definition: 'Hôm nay' },
+    { word: 'phroong ni', definition: 'Ngày mai' },
+    { word: 'mue waan', definition: 'Hôm qua' },
+    { word: 'tohn chao', definition: 'Buổi sáng' },
+    { word: 'tohn bai', definition: 'Buổi chiều' },
+    { word: 'tohn yen', definition: 'Buổi tối' },
+    { word: 'kheun', definition: 'Đêm' },
+    { word: 'sapda', definition: 'Tuần' },
+    { word: 'deuan', definition: 'Tháng' },
+    { word: 'pii', definition: 'Năm' },
+    
+    // Cơ thể
+    { word: 'hua', definition: 'Đầu' },
+    { word: 'taa', definition: 'Mắt' },
+    { word: 'huu', definition: 'Tai' },
+    { word: 'dang', definition: 'Mũi' },
+    { word: 'paak', definition: 'Miệng' },
+    { word: 'mue', definition: 'Tay' },
+    { word: 'thao', definition: 'Chân' },
+    { word: 'jai', definition: 'Tim' },
+    { word: 'thong', definition: 'Bụng' },
+    
+    // Nghề nghiệp
+    { word: 'khruu', definition: 'Giáo viên' },
+    { word: 'mo', definition: 'Bác sĩ' },
+    { word: 'nak rian', definition: 'Học sinh' },
+    { word: 'pho kha', definition: 'Người bán' },
+    { word: 'tam ruat', definition: 'Cảnh sát' },
+    { word: 'thang chang', definition: 'Thợ' },
+    { word: 'kon khap rot', definition: 'Tài xế' },
+    
+    // Động vật
+    { word: 'sunak', definition: 'Chó' },
+    { word: 'maew', definition: 'Mèo' },
+    { word: 'chang', definition: 'Voi' },
+    { word: 'sua', definition: 'Hổ' },
+    { word: 'ling', definition: 'Khỉ' },
+    { word: 'nok', definition: 'Chim' },
+    
+    // Hoạt động
     { word: 'hai', definition: 'Cho, đưa cho' },
     { word: 'khun', definition: 'Lên, leo lên' },
     { word: 'long', definition: 'Xuống, rơi xuống' },
     { word: 'khai', definition: 'Bán' },
     { word: 'suea', definition: 'Mua' },
+    { word: 'fak', definition: 'Gửi, nhờ' },
+    { word: 'rab', definition: 'Nhận' },
+    { word: 'haa', definition: 'Tìm kiếm' },
+    { word: 'kin', definition: 'Ăn' },
+    { word: 'deum', definition: 'Uống' },
+    { word: 'lapse', definition: 'Ngủ' },
+    { word: 'rian', definition: 'Học' },
+    { word: 'son', definition: 'Dạy' },
+    { word: 'len', definition: 'Chơi' },
+    { word: 'wing', definition: 'Chạy' },
+    { word: 'doen', definition: 'Đi bộ' },
+    
+    // Mô tả
+    { word: 'yai', definition: 'To, lớn' },
+    { word: 'lek', definition: 'Nhỏ' },
+    { word: 'suung', definition: 'Cao' },
+    { word: 'tia', definition: 'Thấp' },
+    { word: 'sanuk', definition: 'Vui' },
+    { word: 'buea', definition: 'Chán' },
+    { word: 'ron', definition: 'Nóng' },
+    { word: 'yen', definition: 'Lạnh' },
+    { word: 'dee', definition: 'Tốt' },
+    { word: 'mai dee', definition: 'Không tốt' },
+    
+    // Khác
     { word: 'phuak', definition: 'Bạn bè' },
-    { word: 'chai', definition: 'Đàn ông' },
     { word: 'phu chai', definition: 'Nam giới' },
     { word: 'phu ying', definition: 'Nữ giới' },
     { word: 'dek', definition: 'Trẻ em' },
-    { word: 'haa', definition: 'Tìm kiếm' },
-    { word: 'hen', definition: 'Thấy, nhìn thấy' },
-    { word: 'fak', definition: 'Gửi, nhờ' },
-    { word: 'rab', definition: 'Nhận' },
-    { word: 'tam', definition: 'Làm, thực hiện' },
-    { word: 'phut', definition: 'Nói' },
-    { word: 'fang', definition: 'Nghe' },
     { word: 'khwam', definition: 'Ý nghĩa, nghĩa' },
     { word: 'samrap', definition: 'Cho, dành cho' },
-    { word: 'kha', definition: 'Giá cả' },
-    { word: 'kha hen', definition: 'Giá trị' }
+    { word: 'raakha', definition: 'Giá cả' },
+    { word: 'khun ka', definition: 'Giá trị' },
+    { word: 'ban', definition: 'Nhà' },
+    { word: 'rong rian', definition: 'Trường học' },
+    { word: 'rong phayaban', definition: 'Bệnh viện' },
+    { word: 'talad', definition: 'Chợ' }
 ];
         const dom = {
             startScreen: document.getElementById('start-screen'),
@@ -258,45 +384,166 @@ let selectedOption = null;
 
 // Bảng chuyển đổi mẫu cho một số từ phổ biến
 const thaiToRomanized = {
+    // Chào hỏi cơ bản
     'สวัสดี': 'sawasdee',
     'ขอบคุณ': 'khob khun',
     'ขอโทษ': 'khor thot',
     'ลาก่อน': 'laa gon',
+    'สบายดีไหม': 'sabai dee mai',
+    'ไม่เป็นไร': 'mai pen rai',
+    
+    // Từ cơ bản
     'ใช่': 'chai',
     'ไม่ใช่': 'mai chai',
     'ไม่': 'mai',
     'ครับ': 'khrap',
     'ค่ะ': 'kha',
     'รัก': 'rak',
-    'เพื่อน': 'phuak',
-    'เด็ก': 'dek',
-    'หา': 'haa',
     'เห็น': 'hen',
     'ฟัง': 'fang',
     'พูด': 'phut',
     'ทำ': 'tam',
-    'ซื้อ': 'suea',
-    'ขาย': 'khai',
+    'ไป': 'pai',
+    'มา': 'maa',
+    'อยู่': 'yuu',
+    'นั่ง': 'nang',
+    'ยืน': 'yen',
+    'นอน': 'non',
+    
+    // Gia đình
+    'พ่อ': 'pho',
+    'แม่': 'mae',
+    'พี่': 'phi',
+    'น้อง': 'nong',
+    'ลูก': 'luuk',
+    'ย่า': 'yaa',
+    'ตา': 'taa',
+    'ครอบครัว': 'krob khrua',
+    
+    // Số đếม
+    'หนึ่ง': 'nueng',
+    'สอง': 'song',
+    'สาม': 'sam',
+    'สี่': 'si',
+    'ห้า': 'haa',
+    'หก': 'hok',
+    'เจ็ด': 'jet',
+    'แปด': 'paet',
+    'เก้า': 'kao',
+    'สิบ': 'sip',
+    
+    // Màu sắc
+    'แดง': 'daeng',
+    'เขียว': 'khiao',
+    'น้ำเงิน': 'nam ngoen',
+    'เหลือง': 'luang',
+    'ดำ': 'dam',
+    'ขาว': 'khao',
+    'ม่วง': 'muang',
+    'ส้ม': 'som',
+    'ชมพู': 'chom phu',
+    
+    // Thức ăn
+    'ข้าว': 'khao',
+    'น้ำ': 'nam',
+    'ไก่': 'gai',
+    'หมู': 'muu',
+    'เนื้อ': 'neua',
+    'ปลา': 'plaa',
+    'ผัก': 'phak',
+    'ผลไม้': 'phon la mai',
+    'ข้าวเหนียว': 'khao niao',
+    'ต้มยำ': 'tom yam',
+    'ผัดไทย': 'pad thai',
+    'ชาเย็น': 'cha yen',
+    'กาแฟ': 'ka fae',
+    
+    // Thời gian
+    'วันนี้': 'wan ni',
+    'พรุ่งนี้': 'phroong ni',
+    'เมื่อวาน': 'mue waan',
+    'ตอนเช้า': 'tohn chao',
+    'ตอนบ่าย': 'tohn bai',
+    'ตอนเย็น': 'tohn yen',
+    'คืน': 'kheun',
+    'สัปดาห์': 'sapda',
+    'เดือน': 'deuan',
+    'ปี': 'pii',
+    
+    // Cơ thể
+    'หัว': 'hua',
+    'ตา': 'taa',
+    'หู': 'huu',
+    'ดัง': 'dang',
+    'ปาก': 'paak',
+    'มือ': 'mue',
+    'เท้า': 'thao',
+    'ใจ': 'jai',
+    'ท้อง': 'thong',
+    
+    // Nghề nghiệp
+    'ครู': 'khruu',
+    'หมอ': 'mo',
+    'นักเรียน': 'nak rian',
+    'พ่อค้า': 'pho kha',
+    'ตำรวจ': 'tam ruat',
+    'ช่าง': 'chang',
+    'คนขับรถ': 'kon khap rot',
+    
+    // Động vật
+    'หมา': 'maa',
+    'แมว': 'maew',
+    'ช้าง': 'chang',
+    'เสือ': 'sua',
+    'ลิง': 'ling',
+    'นก': 'nok',
+    
+    // Hoạt động
     'ให้': 'hai',
     'ขึ้น': 'khun',
     'ลง': 'long',
-    'รับ': 'rab',
+    'ขาย': 'khai',
+    'ซื้อ': 'suea',
     'ส่ง': 'song',
+    'รับ': 'rab',
+    'หา': 'haa',
+    'กิน': 'kin',
+    'ดื่ม': 'deum',
+    'เรียน': 'rian',
+    'สอน': 'son',
+    'เล่น': 'len',
+    'วิ่ง': 'wing',
+    'เดิน': 'doen',
+    
+    // Mô tả
+    'ใหญ่': 'yai',
+    'เล็ก': 'lek',
+    'สูง': 'suung',
+    'เตี้ย': 'tia',
+    'สนุก': 'sanuk',
+    'เบื่อ': 'buea',
+    'ร้อน': 'ron',
+    'เย็น': 'yen',
+    'ดี': 'dee',
+    'ไม่ดี': 'mai dee',
+    
+    // Địa điểm
+    'บ้าน': 'ban',
+    'โรงเรียน': 'rong rian',
+    'โรงพยาบาล': 'rong phayaban',
+    'ตลาด': 'talad',
+    
+    // Khác
+    'เพื่อน': 'phuak',
+    'ผู้ชาย': 'phu chai',
+    'ผู้หญิง': 'phu ying',
+    'เด็ก': 'dek',
     'ความ': 'khwam',
     'สำหรับ': 'samrap',
-    'ชาย': 'chai',
-    'หญิง': 'phu ying',
-    'ผู้ชาย': 'phu chai',
-    'ราคา': 'kha',
-    'มูลค่า': 'kha hen',
-    '\u0e25\u0e32\u0e01\u0e48\u0e2d\u0e19': 'laa gon',
-    // Add common mixed forms
-    'สวัสดีค่ะ/ครับ': 'sawasdee kha/khrap',
-    'แล้วเจอกัน': 'laew jer gan',
-    'สบายดีไหม': 'sabai dee mai',
-    'ฝันดี': 'fan dee',
-    'ไม่เป็นไร': 'mai pen rai',
-    // Add new words from screenshot
+    'ราคา': 'raakha',
+    'คุณค่า': 'khun ka',
+    
+    // Từ bổ sung từ code cũ
     'คิด': 'khit',
     'คุย': 'khui',
     'ลา': 'la',
@@ -511,51 +758,6 @@ function fallbackRomanize(thai) {
         }
 
         function showNextQuestion() {
-            // Show feedback and update score only if an option was selected
-            const correctAnswer = questions[currentQuestionIndex].answer;
-            function romanizeOption(opt) {
-                return opt.split(/([\s\/]+)/).map(part => {
-                    if (/^[\u0E00-\u0E7F]+$/.test(part)) {
-                        return thaiToRomanized[part] || fallbackRomanize(part);
-                    }
-                    return part;
-                }).join('');
-            }
-            if (selectedOption !== null) {
-                const selectedRomanized = romanizeOption(selectedOption);
-                const correctRomanized = romanizeOption(correctAnswer);
-                const isCorrect = selectedRomanized === correctRomanized;
-                if (isCorrect) {
-                    score++;
-                    dom.feedbackEl.textContent = 'Chính xác!';
-                    dom.feedbackEl.classList.add('text-green-500');
-                    dom.feedbackEl.classList.remove('text-red-500');
-                } else {
-                    dom.feedbackEl.textContent = `Sai rồi! Đáp án đúng là: ${correctRomanized}`;
-                    dom.feedbackEl.classList.add('text-red-500');
-                    dom.feedbackEl.classList.remove('text-green-500');
-                    incorrectWords.push({word: correctAnswer, yourAnswer: selectedOption});
-                }
-                dom.scoreEl.textContent = `Điểm: ${score}`;
-                Array.from(dom.optionsContainer.children).forEach(btn => {
-                    const btnRomanized = btn.textContent;
-                    btn.disabled = true;
-                    btn.classList.remove('selected', 'correct', 'incorrect');
-                    if (btnRomanized === selectedRomanized && isCorrect) {
-                        btn.classList.add('correct');
-                    } else if (btnRomanized === correctRomanized) {
-                        btn.classList.add('correct');
-                    } else if (btnRomanized === selectedRomanized && !isCorrect) {
-                        btn.classList.add('incorrect');
-                    }
-                });
-            } else {
-                // If no option selected, just disable buttons
-                Array.from(dom.optionsContainer.children).forEach(btn => {
-                    btn.disabled = true;
-                });
-            }
-            dom.actionButtons.classList.remove('hidden');
             currentQuestionIndex++;
             if (currentQuestionIndex < TOTAL_QUESTIONS) {
                 setTimeout(displayQuestion, 500); // Small delay to show feedback
